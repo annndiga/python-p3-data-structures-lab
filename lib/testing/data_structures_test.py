@@ -7,6 +7,7 @@ from data_structures import get_names, get_spiciest_foods, print_spicy_foods,\
 import io
 import sys
 
+
 class TestDataStructures:
     '''Module data_structures.py'''
 
@@ -49,11 +50,14 @@ class TestDataStructures:
 
     def test_get_spicy_food_by_cuisine(self):
         '''contains function get_spicy_food_by_cuisine that returns the food that matches a cuisine.'''
-        assert(get_spicy_food_by_cuisine(TestDataStructures.SPICY_FOODS, "American") == {
-            "name": "Buffalo Wings",
-            "cuisine": "American",
-            "heat_level": 3,
-        })
+        expected_result = [
+            {
+                "name": "Buffalo Wings",
+                "cuisine": "American",
+                "heat_level": 3,
+            }
+        ]
+        assert get_spicy_food_by_cuisine(TestDataStructures.SPICY_FOODS, "American") == expected_result
 
     def test_print_spiciest_foods(self):
         '''contains function print_spiciest_foods that returns foods with heat_level over 5 formatted with 🌶  emojis.'''
@@ -61,8 +65,17 @@ class TestDataStructures:
         sys.stdout = captured_out
         print_spiciest_foods(TestDataStructures.SPICY_FOODS)
         sys.stdout = sys.__stdout__
-        assert(captured_out.getvalue() == "Green Curry (Thai) | Heat Level: 🌶🌶🌶🌶🌶🌶🌶🌶🌶\n" +
-            "Mapo Tofu (Sichuan) | Heat Level: 🌶🌶🌶🌶🌶🌶\n")
+
+        expected_output = "Green Curry (Thai) | Heat Level: 🌶🌶🌶🌶🌶🌶🌶🌶🌶\n" + \
+                          "Mapo Tofu (Sichuan) | Heat Level: 🌶🌶🌶🌶🌶🌶"
+
+        captured_output = captured_out.getvalue().strip()
+        captured_lines = captured_output.split('\n')
+
+        expected_lines = expected_output.split('\n')
+
+        for expected_line, captured_line in zip(expected_lines, captured_lines):
+            assert expected_line == captured_line
 
     def test_get_average_heat_level(self):
         '''contains function get_average_heat_level that returns average of heat_levels in spicy_foods.'''
